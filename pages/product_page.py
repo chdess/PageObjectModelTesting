@@ -14,4 +14,3 @@ class ProductPage(BasePage):
         basket_total_alert = self.browser.find_element(*ProductPageLocators.BASKET_TOTAL_ALERT).text.strip()
         basket_total = self.browser.find_element(*ProductPageLocators.BASKET_TOTAL).text.strip()
         assert price in basket_total_alert and price in basket_total, f"Expected {price}, but got {basket_total} in inner page and {basket_total_alert} in alert message"
-
