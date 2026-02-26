@@ -1,4 +1,5 @@
 from .pages.product_page import ProductPage
+from .pages.basket_page import BasketPage
 import pytest
 
 @pytest.mark.parametrize('number', ["0"
@@ -56,3 +57,12 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     product_page.open()
     product_page.add_to_basket()
     product_page.success_message_should_be_disappear()
+
+def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.go_to_basket_page()
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.should_not_be_products_in_basket()
+    basket_page.should_be_text_about_that_basket_is_empty()
