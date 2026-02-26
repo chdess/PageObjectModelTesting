@@ -1,19 +1,42 @@
+from .pages.login_page import LoginPage
 from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
+from faker import Faker
 import pytest
 
-@pytest.mark.parametrize('number', ["0"
-                                  #"1",
-                                  #"2",
-                                  #"3",
-                                  #"4",
-                                  #"5",
-                                  #"6",
-                                  #pytest.param("7", marks=pytest.mark.xfail),
-                                  #"8",
-                                  #"9"
-                         ]
- )
+
+@pytest.mark.user
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/accounts/login/"
+        page = LoginPage(browser, link)
+        page.open()
+        fake = Faker()
+        email = fake.email()
+        password = fake.password(9)
+        page.register_new_user(email, password)
+        page.should_be_authorized_user()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        product_page.add_to_basket()
+        product_page.solve_quiz_and_get_code()
+        product_page.should_be_same_product_name()
+        product_page.should_be_same_price()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        product_page.should_not_be_success_message()
+
+
+@pytest.mark.parametrize('number', ["0",
+#"1","2","3","4","5","6",pytest.param("7", marks=pytest.mark.xfail),"8", "9"
+])
 def test_guest_can_add_product_to_basket(browser,number):
     print(f"\nhttp://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer{number}")
     link = f"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer{number}"
