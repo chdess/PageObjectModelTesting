@@ -1,8 +1,10 @@
 from selenium.webdriver.common.by import By
 
-
-class MainPageLocators():
+class BasePageLocators():
     LOGIN_LINK = (By.XPATH, "//a[@id='login_link']")
+    LOGIN_LINK_INVALID = (By.XPATH, "//a[@id='login_link_inc']")
+
+#class MainPageLocators():
 
 class LoginPageLocators():
     REG_FORM = (By.XPATH, "//form[@id='register_form']")
@@ -20,3 +22,4 @@ class ProductPageLocators():
     BASKET_PRODUCT_NAME = (By.XPATH, "//div[contains(@class, 'alertinner') and not (contains(text(), 'basket')) and not(p)]/strong")
     BASKET_TOTAL_ALERT = (By.XPATH, "//div[contains(@class, 'alertinner') and not (contains(text(), 'basket'))]/p/strong")
     PRODUCT_NAME = (By.XPATH, "//div[contains(@class, 'product_main')]/h1")
+    SUCCESS_MESSAGE = (By.XPATH, "//div[contains(@class, 'alert-success')]")
